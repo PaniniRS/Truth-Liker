@@ -11,25 +11,8 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()))
 
-# LOGIN DB
-conn = sqlite3.connect('login.db')
-c = conn.cursor()
-c.execute("""CREATE TABLE IF NOT EXISTS login (user, pw)""")
-conn.commit()
-conn.close()
 
-user = "lindaholt1995@outlook.com"
-pw = "Juventus12"
-post = input("LINK OD POSTOT: ")
-
-
-# LOGIN
-
-
-browser.get(post)
-time.sleep(3)
-
-def login(user, pw):
+def loginSite(user, pw):
     try:
         browser.get("https://truthsocial.com/login")
         time.sleep(3)
@@ -66,14 +49,42 @@ def likePost2(post):
         print("❌ | ERROR LIKING POST")
         browser.get(post)
         time.sleep(3)
-                                          
 
+# Options                  
+# Database active or not
+dbActive = False
 # Main function
 if __name__ == "__main__":
-    print("⌛ | STARTING")
+    #Not using a database
+    if dbActive == False:
+        print("❌ | ERROR: NO DATABASE ACTIVE")
+        time.sleep(0.1)
+        print("⌛ | STARTING")
+        time.sleep(0.2)
 
+        user = input("Enter your username: ")
+        pw = input("Enter your password: ")
+        post = input("Enter the post you want to like: ")
 
-    login(user=user, pw=pw)
-    likePost2(post=post)
-    print("✅ | DONE")
-    browser.quit()    
+        loginSite(user=user, pw=pw)
+        likePost2(post=post)
+        print("✅ | DONE")
+        driver.quit()
+        exit()
+    #Using a database
+    else:
+        print("✅ | DATABASE ACTIVE")
+        time.sleep(0.1)
+        print("⌛ | STARTING")
+        time.sleep(0.2)
+        #for every entry in database login, like the post then log out 
+        conn = sqlite3.connect('truthLogins.db')
+        c = conn.cursor()
+        c.execute("SELECT * FROM login")
+        logins = c.fetchall()
+        for login in logins:
+            loginSite(user=login[0], pw=login[1])
+            likePost(post=post)
+            driver.get("https://truthsocial.com/logout")
+            time.sleep(3)
+        conn.close()
