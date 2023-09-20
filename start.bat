@@ -33,10 +33,7 @@ if %choice%==1 (
 if %choice%==2 (
     venv\Scripts\python script.py
 )
+
 #deactivate the virtual environment
 venv\Scripts\deactivate
 
-
-#run the python script
-python script.py
-```
