@@ -7,18 +7,21 @@ import sqlite3
 from selenium.webdriver.edge.service import Service as EdgeService
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
-# open the driver in full screen
-options = webdriver.ChromeOptions()
-options.add_argument("--start-maximized")
-options.add_argument("--disable-notifications")
-options.add_argument("--disable-popup-blocking")
-options.add_argument("--disable-extensions")
-options.add_argument("--disable-gpu")
-options.add_argument("--ignore-certificate-errors")
-options.add_argument("--allow-running-insecure-content")
+#Delete the selenium folder in temp
+# import os
+# import shutil
+# try:
+#     shutil.rmtree(os.path.join(os.environ["TMP"], "selenium"), ignore_errors=True)
+#     print("✅ | DELETED TEMP SELENIUM FOLDER")
+# except:
+#     print("❌ | ERROR DELETING TEMP SELENIUM FOLDER")
+#     pass
+
 
 # Edge
-driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()), options=options)
+driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()))
+#Make driver fullscreen
+driver.maximize_window()
 
 def loginSite(user, pw):
     try:
@@ -38,14 +41,14 @@ def loginSite(user, pw):
 
 def likePost(post):
     driver.get(post)
+    time.sleep(1)
     try:
-        like = driver.find_element("xpath", "//span[normalize-space()='Like']")
-        like.click()
+        like = driver.find_element("css", ".p-1:nth-child(3)")
+        print(like)
         time.sleep(1)
     except:
         print("❌ | ERROR LIKING POST")
         driver.get(post)
-        time.sleep(3)
 
 # Options                  
 # Database active or not
