@@ -14,11 +14,11 @@ driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install(
 
 def loginSite(user, pw):
     try:
-        browser.get("https://truthsocial.com/login")
+        driver.get("https://truthsocial.com/login")
         time.sleep(3)
-        appendLoginUsername = browser.find_element("name", "username")
+        appendLoginUsername = driver.find_element("name", "username")
         appendLoginUsername.send_keys(user)
-        appendLoginPassword = browser.find_element("name", "password")
+        appendLoginPassword = driver.find_element("name", "password")
         appendLoginPassword.send_keys(pw)
         time.sleep(1)
         appendLoginPassword.send_keys(Keys.ENTER)
@@ -26,28 +26,28 @@ def loginSite(user, pw):
         print(f"✅ | LOGGED IN WITH {user}");
     except:
         print("❌ | ERROR LOGGING IN")
-        browser.quit()
+        driver.quit()
 
 def likePost(post):
     try:
-        browser.get(post)
+        driver.get(post)
         time.sleep(3)
-        likeButton = browser.find_element("xpath", "/html/body/div[1]/div/div[2]/div[2]/div/div/div/div[2]/div/div/div/div/div[1]/div/div/div/div")
+        likeButton = driver.find_element("xpath", "/html/body/div[1]/div/div[2]/div[2]/div/div/div/div[2]/div/div/div/div/div[1]/div/div/div/div")
         likeButton.click()
         time.sleep(3)
         print("     | POST LIKED")
     except:
         print("❌ | ERROR LIKING POST")
-        browser.quit()
+        driver.quit()
 
 def likePost2(post):
     try:
-        like = browser.find_element("xpath", "//span[normalize-space()='Like']")
+        like = driver.find_element("xpath", "//span[normalize-space()='Like']")
         like.click()
         time.sleep(1)
     except:
         print("❌ | ERROR LIKING POST")
-        browser.get(post)
+        driver.get(post)
         time.sleep(3)
 
 # Options                  
