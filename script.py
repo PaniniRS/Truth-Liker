@@ -1,16 +1,24 @@
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 import sqlite3
-import os
 
 # selenium 4
 from selenium.webdriver.edge.service import Service as EdgeService
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
-driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()))
+# open the driver in full screen
+options = webdriver.ChromeOptions()
+options.add_argument("--start-maximized")
+options.add_argument("--disable-notifications")
+options.add_argument("--disable-popup-blocking")
+options.add_argument("--disable-extensions")
+options.add_argument("--disable-gpu")
+options.add_argument("--ignore-certificate-errors")
+options.add_argument("--allow-running-insecure-content")
 
+# Edge
+driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()), options=options)
 
 def loginSite(user, pw):
     try:
@@ -29,18 +37,7 @@ def loginSite(user, pw):
         driver.quit()
 
 def likePost(post):
-    try:
-        driver.get(post)
-        time.sleep(3)
-        likeButton = driver.find_element("xpath", "/html/body/div[1]/div/div[2]/div[2]/div/div/div/div[2]/div/div/div/div/div[1]/div/div/div/div")
-        likeButton.click()
-        time.sleep(3)
-        print("     | POST LIKED")
-    except:
-        print("❌ | ERROR LIKING POST")
-        driver.quit()
-
-def likePost2(post):
+    driver.get(post)
     try:
         like = driver.find_element("xpath", "//span[normalize-space()='Like']")
         like.click()
@@ -61,13 +58,13 @@ if __name__ == "__main__":
         time.sleep(0.1)
         print("⌛ | STARTING")
         time.sleep(0.2)
-
+    #Ask for login info and post with a popup
         user = input("Enter your username: ")
         pw = input("Enter your password: ")
         post = input("Enter the post you want to like: ")
 
         loginSite(user=user, pw=pw)
-        likePost2(post=post)
+        likePost(post=post)
         print("✅ | DONE")
         driver.quit()
         exit()
