@@ -40,9 +40,11 @@ def printTable():
 
 
 run = True #whether to run the main loop or not
-print("--------------------------------------------------")
-print("           Welcome to the DB Manager              ")
-print("--------------------------------------------------")
+print("+------------------------------------------------+")
+print("|                                                |")
+print("|           Welcome to the DB Manager            |")
+print("|                                                |")
+print("+------------------------------------------------+")
 #prints out all of the .db files in the directory with their table
 print("📁 | DATABASES FOUND:")
 for file in glob.glob("*.db"):
@@ -50,7 +52,7 @@ for file in glob.glob("*.db"):
 print("--------------------------------------------------")
 
 #user enters database name to connect to
-userChoiceDB = input("Enter database you want to connect to: ")
+userChoiceDB = input("Enter database you want to connect to (only name without .db): ")
 conn = sqlite3.connect(userChoiceDB + ".db")
 print("Connecting to database...")
 time.sleep(0.2)
