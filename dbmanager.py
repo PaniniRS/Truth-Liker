@@ -2,6 +2,8 @@ import sqlite3
 import time
 import glob
 
+#TODO: Make first value a key
+
 run = True
 print("--------------------------------------------------")
 print("           Welcome to the DB Manager              ")
@@ -75,7 +77,7 @@ while run:
     elif choice == "2":
         #add a new table
         c = conn.cursor()
-        tableName = input("Enter a name for your table: ")
+        tableName = input("Enter a name for your table: ") #TODO: make it so you only selec it once so you dont have to ask every time and repeat code
         c.execute(f"""CREATE TABLE IF NOT EXISTS {tableName} (user, pw)""")
         conn.commit()
         print("Table created successfully")
@@ -113,7 +115,7 @@ while run:
         c = conn.cursor()
         tableName = input("Enter the name of the table: ")
         rowId = input("Enter the row id: ")
-        c.execute(f"""DELETE FROM {tableName} WHERE rowid = {rowId}""")
+        c.execute(f"""DELETE FROM {tableName} WHERE rowid = {rowId}""") #ERROR: doesnt work for some reason, the row id doesnt exits, also put it in a try except so it doesnt crash
         conn.commit()
         print("Row deleted successfully")
         time.sleep(0.2)
