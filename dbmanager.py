@@ -37,7 +37,22 @@ def printTable():
     print("                                                  ")
     print("9. Exit                                           ")
     print("--------------------------------------------------")
-
+def printEntries():
+        conn = sqlite3.connect(userChoiceDB + ".db")
+        c = conn.cursor()
+        #fail safe if table doesnt exits
+        try:
+            c.execute(f"""SELECT rowid, * FROM {userChoiceTable}""")
+            print("rowid, user, pw")
+            for row in c.fetchall():
+                print(f"{row}")
+            #pause the program till the user hits a key so the user can see the output
+            input("Press any key to continue...")
+        except:
+            print("Table does not exist")
+            input("Press any key to continue...")
+        conn.commit()
+        time.sleep(1.2)
 
 run = True #whether to run the main loop or not
 print("+------------------------------------------------+")
@@ -87,7 +102,7 @@ while run:
         print("Connecting to database...")
         time.sleep(0.2)
         print("Connected to database successfully")
-        time.sleep(0.5)
+        time.sleep(1.2)
     #connect to a different table
     elif choice == "1":
         c = conn.cursor()
@@ -95,6 +110,7 @@ while run:
         c.execute(f"""SELECT COUNT(*) FROM {userChoiceTable}""")
         entries = c.fetchall()
         print(f"Connected to table {userChoiceTable} successfully")
+        time.sleep(1.2)
     #create a new database
     elif choice == "2":
         conn.close()
@@ -104,14 +120,17 @@ while run:
         c.execute("""CREATE TABLE IF NOT EXISTS login (user, pw)""")
         conn.commit()
         print("Database created successfully")
-        time.sleep(0.2)
+        time.sleep(1.2)
     #add a new table
     elif choice == "3":
         c = conn.cursor()
+        #ask the user for the table name
+        userChoiceTable = input("Enter a name for your table: ")
+        
         c.execute(f"""CREATE TABLE IF NOT EXISTS {userChoiceTable} (user, pw)""")
         conn.commit()
         print("Table created successfully")
-        time.sleep(0.2)
+        time.sleep(1.2)
     #add a new row
     elif choice == "4":
         c = conn.cursor()
@@ -120,32 +139,22 @@ while run:
         c.execute(f"""INSERT INTO {userChoiceTable} VALUES (?, ?)""", (user, pw))
         conn.commit()
         print("Row added successfully")
-        time.sleep(0.2)
+        time.sleep(1.2)
     #view all rows
     elif choice == "5":
-        conn = sqlite3.connect(userChoiceDB + ".db")
-        c = conn.cursor()
-        #fail safe if table doesnt exits
-        try:
-            c.execute(f"""SELECT rowid, * FROM {userChoiceTable}""")
-            for row in c.fetchall():
-                print(row)
-        except:
-            print("Table does not exist")
-            time.sleep(0.2)
-            continue
-        conn.commit()
-        print("Entries(rows) displayed successfully")
-        time.sleep(0.2)
+        printEntries()
     #delete a row
     elif choice == "6":
         conn = sqlite3.connect(userChoiceDB + ".db")
         c = conn.cursor()
-        rowId = input("Enter the row id: ")
-        c.execute(f"""DELETE FROM {userChoiceTable} WHERE rowid = {rowId}""") #ERROR: doesnt work for some reason, the row id doesnt exits, also put it in a try except so it doesnt crash
+
+        printEntries()
+
+        rowId = input("Enter the row id to delete: ")
+        c.execute(f"""DELETE FROM {userChoiceTable} WHERE rowid = {rowId}""") 
         conn.commit()
-        print("Row deleted successfully")
-        time.sleep(0.2)
+        print("Row deleted...")
+        time.sleep(1.2)
     #delete a table
     elif choice == "7":
         conn = sqlite3.connect(userChoiceDB + ".db")
@@ -153,7 +162,7 @@ while run:
         c.execute(f"""DROP TABLE {userChoiceTable}""")
         conn.commit()
         print("Table deleted successfully")
-        time.sleep(0.2)
+        time.sleep(1.2)
     #delete a database
     elif choice == "8":
         userChoiceDB = input("Enter the name of the database: ")
@@ -163,13 +172,13 @@ while run:
         conn.commit()
         conn.close()
         print("Database deleted successfully")  
-        time.sleep(0.2)
+        time.sleep(1.2)
     #exit
     elif choice == "9":
         conn.close()
         print(f"Exiting...")
-        time.sleep(0.2)
+        time.sleep(0.3)
         exit()  
     else:
         print("Invalid input")
-        time.sleep(0.2)
+        time.sleep(0.6)
