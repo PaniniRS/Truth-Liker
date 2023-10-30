@@ -50,9 +50,8 @@ def likePost(post):
     time.sleep(2.5)
     try:
         #Wait for the button to be able to be clicked
-        like = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='Post__actions']//button[@aria-label='Like']"))
-)
-        # like = driver.find_elementdriver.find_element("xpath", "//div[@class='Post__actions']//button[@aria-label='Like']")
+        # like = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='Post__actions']//button[@aria-label='Like']")))
+        like = driver.find_element(By.XPATH, "//button[@title='Like']")
         print(like)
         like.click()
         print("✅ | LIKED POST")
