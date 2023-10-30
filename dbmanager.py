@@ -1,9 +1,15 @@
 import sqlite3
 import time
+import glob
 
 run = True
 print("--------------------------------------------------")
 print("           Welcome to the DB Manager              ")
+print("--------------------------------------------------")
+#prints out all of the .db files in the directory with their table
+print("📁 | DATABASES FOUND:")
+for file in glob.glob("*.db"):
+    print(file)
 print("--------------------------------------------------")
 
 #user enters database name to connect to
