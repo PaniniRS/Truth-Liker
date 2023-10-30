@@ -3,6 +3,12 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import sqlite3
 
+#test
+import glob #for finding all the .db files in the same directory
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 # selenium 4
 from selenium.webdriver.edge.service import Service as EdgeService
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
@@ -41,10 +47,15 @@ def loginSite(user, pw):
 
 def likePost(post):
     driver.get(post)
-    time.sleep(1)
+    time.sleep(2.5)
     try:
-        like = driver.find_element("css", ".p-1:nth-child(3)")
+        #Wait for the button to be able to be clicked
+        like = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='Post__actions']//button[@aria-label='Like']"))
+)
+        # like = driver.find_elementdriver.find_element("xpath", "//div[@class='Post__actions']//button[@aria-label='Like']")
         print(like)
+        like.click()
+        print("✅ | LIKED POST")
         time.sleep(1)
     except:
         print("❌ | ERROR LIKING POST")
@@ -52,10 +63,11 @@ def likePost(post):
 
 # Options                  
 # Database active or not
-dbActive = False
+dbActive = True
 # Main function
 if __name__ == "__main__":
     #Not using a database
+    post = input("Enter the post you want to like: ")
     if dbActive == False:
         print("❌ | ERROR: NO DATABASE ACTIVE")
         time.sleep(0.1)
@@ -64,7 +76,6 @@ if __name__ == "__main__":
     #Ask for login info and post with a popup
         user = input("Enter your username: ")
         pw = input("Enter your password: ")
-        post = input("Enter the post you want to like: ")
 
         loginSite(user=user, pw=pw)
         likePost(post=post)
@@ -73,14 +84,33 @@ if __name__ == "__main__":
         exit()
     #Using a database
     else:
-        print("✅ | DATABASE ACTIVE")
-        time.sleep(0.1)
+        print("📌 | DATABASE MODE ACTIVE")
+        #print all the .db files found in the same directory
+        print("📁 | DATABASES FOUND:")
+        for file in glob.glob("*.db"):
+            print(file)
+        #print the tables found in each of the databases
+        print("📁 | TABLES FOUND:")
+        for file in glob.glob("*.db"):
+            conn = sqlite3.connect(file)
+            c = conn.cursor()
+            c.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            tables = c.fetchall()
+            for table in tables:
+                print(table[0])
+            conn.close()
+        #ask for the database name and table name
+        database = input("Enter the database name: ")
+        table = input("Enter the table name: ")
+
+        time.sleep(0.3)
         print("⌛ | STARTING")
-        time.sleep(0.2)
+        time.sleep(0.4)
         #for every entry in database login, like the post then log out 
-        conn = sqlite3.connect('truthLogins.db')
+        conn = sqlite3.connect(f'{database}.db')
+        print(f"✅ | DATABASE CONNECTED")
         c = conn.cursor()
-        c.execute("SELECT * FROM login")
+        c.execute(f"SELECT * FROM {table}") #TODO: make this adaptable normal is the table name, ask the user
         logins = c.fetchall()
         for login in logins:
             loginSite(user=login[0], pw=login[1])
