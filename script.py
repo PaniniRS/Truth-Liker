@@ -65,6 +65,34 @@ def likePost(post):
 dbActive = True
 # Main function
 if __name__ == "__main__":
+    #ask whether to use a database or not
+    print("Select an option:")
+    print("1. Use a database")
+    print("2. Don't use a database")
+    choice = input("Enter your choice: ")
+    while choice not in ["1", "2"]:
+        print("Invalid input")
+        choice = input("Enter your choice: ")
+    if choice == "1":
+        dbActive = True
+    elif choice == "2":
+        dbActive = False
+    #clear the screen
+    print("\n" * 100)
+    print("--------------------------------------------------")
+    print("               TRUTH SOCIAL LIKER                 ")
+    print("--------------------------------------------------")
+    print("📌 Mode active: ", end="")
+    if dbActive == True:
+        print("DATABASE")
+    else:
+        print("NO DATABASE")
+    print("--------------------------------------------------")
+    print("⚠️ | WARNING: DO NOT CLOSE THE BROWSER WINDOW")
+    print("--------------------------------------------------")
+
+
+
     #Not using a database
     post = input("Enter the post you want to like: ")
     if dbActive == False:
